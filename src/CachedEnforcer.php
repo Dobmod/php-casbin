@@ -184,7 +184,7 @@ class CachedEnforcer extends Enforcer
     {
         if ($this->enableCache) {
             if (!$this->cache->clear()) {
-                Log::logPrint('clear cache failed');
+                $this->logger->logError(new CasbinException('clear cache failed'));
             }
         }
 

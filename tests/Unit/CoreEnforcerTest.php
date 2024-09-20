@@ -23,7 +23,7 @@ class CoreEnforcerTest extends TestCase
     public function testInitWithEnableLog()
     {
         // The log is not enabled by default
-        $e = new \Casbin\Enforcer($this->modelAndPolicyPath . '/basic_model.conf', $this->modelAndPolicyPath . '/basic_policy.csv', true);
+        $e = new \Casbin\Enforcer($this->modelAndPolicyPath . '/basic_model.conf', $this->modelAndPolicyPath . '/basic_policy.csv', null, true);
 
         $this->assertTrue($e->enforce('alice', 'data1', 'read'));
 

@@ -22,17 +22,25 @@ class DefaultLoggerTest extends TestCase
 
         $path = $logger->path;
         $name = $logger->name;
-        $logfile = $logger->path . DIRECTORY_SEPARATOR . $logger->name;
+        $logfile = $path . DIRECTORY_SEPARATOR . $name;
 
         if (file_exists($logfile)) {
             unlink($logfile);
         }
-        $logger->write('testing logger');
 
-        $logger->write(['testing', 'logger']);
-
-        $logger->writef('testing %s', 'DefaultLogger');
+        $logger->logModel([]);
+        $logger->logEnforce('my_matcher', ['bob'], true, []);
+        $logger->logPolicy([]);
+        $logger->logRole([]);
+        $logger->logError(new \Exception('test'));
+        $pattern = '/^.*? Model:\s*' . PHP_EOL .
+            '^.*? Request: bob ---> true' . PHP_EOL .
+            'Hit Policy:\s*' . PHP_EOL .
+            '^.*? Policy:\s*' . PHP_EOL .
+            '^.*? Roles:\s*' . PHP_EOL .
+            '^.*? Error: test' . PHP_EOL . '$/m';
 
         $this->assertTrue(file_exists($logfile));
+        $this->assertMatchesRegularExpression($pattern, file_get_contents($logfile));
     }
 }
